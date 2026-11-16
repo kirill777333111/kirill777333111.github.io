@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Демо: расчёт стоимости потолка — УютСтрой</title>
+<meta name="description" content="Ответьте на 6 вопросов и узнайте стоимость натяжного потолка. Бесплатный замер.">
+<meta name="theme-color" content="#291ed7">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+  :root {
+    --bg: #f4f6fb; --card: #fff; --text: #0f172a; --muted: #64748b; --line: #e2e8f0;
+    --accent: #291ed7; --accent-2: #5b1ab7; --accent-soft: #eae9fb; --ok: #16a34a; --err: #dc2626;
+    --radius: 20px; --shadow: 0 12px 32px rgba(15, 23, 42, .08);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.45; -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 680px; margin: 0 auto; padding: 14px 16px 0; }
+  header.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 6px 0; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: -.01em; min-width: 0; }
+  .logo {
+    width: 38px; height: 38px; border-radius: 12px; flex: none; color: #fff; font-weight: 900;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2)); display: grid; place-items: center;
+  }
+  .brand small { display: block; font-weight: 500; color: var(--muted); font-size: 12px; }
+  .phone { color: var(--text); text-decoration: none; font-weight: 700; font-size: 14px; white-space: nowrap; }
+  .hero { padding: 12px 0 4px; }
+  .hero h1 { font-size: clamp(23px, 6vw, 34px); line-height: 1.15; margin: 4px 0 8px; letter-spacing: -.02em; }
+  .hero p { margin: 0; color: var(--muted); }
+  .badges { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 0; padding: 0; list-style: none; }
+  .badges li {
+    background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px;
+    font-size: 13px; font-weight: 600;
+  }
+  .badges li::before { content: "✓ "; color: var(--ok); font-weight: 900; }
+  .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; margin-top: 16px; }
+  .progress { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+  .progress .bar { flex: 1; height: 8px; background: var(--accent-soft); border-radius: 99px; overflow: hidden; }
+  .progress .bar i {
+    display: block; height: 100%; width: 0; border-radius: 99px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width .35s ease;
+  }
+  .progress span { font-size: 13px; color: var(--muted); font-weight: 700; white-space: nowrap; }
+  h2.q { font-size: 21px; line-height: 1.25; margin: 0 0 4px; letter-spacing: -.01em; }
+  .hint { color: var(--muted); font-size: 14px; margin: 0 0 14px; min-height: 1px; }
+  .opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .opt {
+    position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 6px;
+    padding: 14px 14px 14px; border: 2px solid var(--line); border-radius: 16px; background: #fff;
+    cursor: pointer; text-align: left; font: inherit; color: inherit;
+    transition: border-color .15s, transform .15s, background .15s;
+  }
+  .opt:hover { border-color: #c9c7f5; }
+  .opt:active { transform: scale(.98); }
+  .opt:focus-visible, .btn:focus-visible, .chip:focus-visible, .stepper button:focus-visible {
+    outline: 3px solid #a9a5ef; outline-offset: 2px;
+  }
+  .opt[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+  .opt .ic { font-size: 26px; line-height: 1; }
+  .opt b { font-size: 15px; padding-right: 20px; }
+  .opt small { color: var(--muted); font-size: 12.5px; line-height: 1.3; }
+  .opt .tick {
+    position: absolute; top: 10px; right: 10px; width: 20px; height: 20px; border-radius: 50%;
+    border: 2px solid var(--line); background: #fff;
+  }
+  .opt[aria-pressed="true"] .tick {
+    border-color: var(--accent);
+    background: var(--accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5L19 7'/%3E%3C/svg%3E") center / 12px no-repeat;
+  }
+  .range-val { font-size: 44px; font-weight: 900; letter-spacing: -.02em; }
+  .range-val small { font-size: 18px; color: var(--muted); font-weight: 700; }
+  input[type=range] { width: 100%; accent-color: var(--accent); height: 34px; margin: 6px 0; }
+  .range-row { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 14px; }
+  .num {
+    width: 100px; padding: 10px 12px; border: 2px solid var(--line); border-radius: 12px;
+    font: inherit; font-weight: 800; font-size: 16px; color: var(--text);
+  }
+  .counter { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .counter:last-child { border-bottom: 0; }
+  .counter span { font-weight: 600; }
+  .stepper { display: flex; align-items: center; gap: 6px; }
+  .stepper button {
+    width: 42px; height: 42px; border-radius: 12px; border: 2px solid var(--line); background: #fff;
+    font-size: 22px; font-weight: 800; cursor: pointer; color: var(--text); line-height: 1;
+  }
+  .stepper output { min-width: 34px; text-align: center; font-weight: 900; font-size: 19px; }
+  .nav { display: flex; gap: 10px; margin-top: 20px; }
+  .btn { appearance: none; border: 0; border-radius: 14px; padding: 15px 18px; font: inherit; font-weight: 800; cursor: pointer; font-size: 16px; }
+  .btn-primary {
+    flex: 1; color: #fff; background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    box-shadow: 0 8px 20px rgba(41, 30, 215, .28);
+  }
+  .btn-primary:disabled { opacity: .45; box-shadow: none; cursor: not-allowed; }
+  .btn-ghost { background: #f1f5f9; color: var(--text); }
+  .result { text-align: center; padding: 4px 0; }
+  .price { font-size: clamp(28px, 8.5vw, 42px); font-weight: 900; letter-spacing: -.02em; margin: 4px 0 6px; line-height: 1.1; }
+  .price span { background: linear-gradient(90deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .breakdown { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 12px 0 2px; }
+  .breakdown div { background: #f8fafc; border-radius: 12px; padding: 10px 6px; font-size: 12px; color: var(--muted); text-align: center; }
+  .breakdown b { display: block; color: var(--text); font-size: 14px; }
+  .field { margin-top: 14px; }
+  .lbl { display: block; font-size: 13px; font-weight: 700; color: var(--muted); margin-bottom: 6px; }
+  .in {
+    width: 100%; padding: 14px; border: 2px solid var(--line); border-radius: 14px; font: inherit;
+    font-size: 16px; background: #fff; color: var(--text);
+  }
+  .in:focus, .num:focus { outline: none; border-color: var(--accent); }
+  .in.bad { border-color: var(--err); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { border: 2px solid var(--line); background: #fff; border-radius: 999px; padding: 9px 14px; font: inherit; font-weight: 700; cursor: pointer; color: var(--text); }
+  .chip[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+  .consent { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; color: var(--muted); margin-top: 16px; cursor: pointer; }
+  .consent input { width: 20px; height: 20px; margin: 1px 0 0; accent-color: var(--accent); flex: none; }
+  .consent a { color: var(--accent); }
+  .err { color: var(--err); font-size: 14px; min-height: 20px; margin-top: 10px; font-weight: 600; }
+  .hp { position: absolute; left: -9999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+  .thanks { text-align: center; padding: 18px 0 8px; }
+  .thanks .big { font-size: 60px; line-height: 1; }
+  .thanks h2 { margin: 12px 0 6px; }
+  footer { color: var(--muted); font-size: 12px; text-align: center; padding: 22px 0 30px; }
+  footer a { color: var(--muted); }
+  .fade { animation: fade .28s ease; }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  @media (min-width: 560px) {
+    .opts { grid-template-columns: repeat(3, 1fr); }
+    .card { padding: 28px; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+  .demo-banner { background: #0f172a; color: #e2e8f0; font-size: 12.5px; line-height: 1.35; text-align: center;
+    padding: 8px 12px; border-radius: 0 0 14px 14px; margin: -14px -16px 6px; }
+  .demo-banner b { color: #fff; }
+  .tgmsg { text-align: left; background: #e7f3ff; color: #0f172a; border-radius: 18px 18px 18px 6px;
+    padding: 12px 14px; margin: 16px auto; max-width: 420px; font-size: 14px; line-height: 1.55;
+    box-shadow: 0 2px 10px rgba(15, 23, 42, .08); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="demo-banner"><b>Демо-версия</b> квиза для «УютСтрой». Это не сайт компании: цены условные, форма ничего не отправляет.</div>
+  <header class="top">
+    <div class="brand">
+      <div class="logo" id="logo" aria-hidden="true">П</div>
+      <div><span id="cname">ПотолокПро</span><small id="ctag">Натяжные потолки под ключ</small></div>
+    </div>
+    <a class="phone" id="cphone" href="#">&nbsp;</a>
+  </header>
+
+  <section class="hero">
+    <h1 id="title">Рассчитайте стоимость натяжного потолка за 1 минуту</h1>
+    <p id="subtitle"></p>
+    <ul class="badges" id="badges"></ul>
+  </section>
+
+  <main class="card" id="quiz" aria-live="polite">
+    <div class="progress" aria-hidden="true"><div class="bar"><i id="bar"></i></div><span id="plabel">Шаг 1</span></div>
+    <div id="step"><noscript>Для расчёта включите JavaScript.</noscript></div>
+  </main>
+
+  <footer>
+    © <span id="fname">ПотолокПро</span> · <a href="privacy.html" target="_blank" rel="noopener">Политика конфиденциальности</a><br>
+    Расчёт предварительный и не является публичной офертой.
+  </footer>
+</div>
+
+<script>
+/*
+ * Формула расчёта квиза. Чистая функция: answers + pricing (из config.json) → диапазон цены.
+ * Используется на странице (window.QuizCalc) и в тестах (QuickJS).
+ *
+ * answers = {
+ *   room: "kitchen", area: 18, canvas: "mat",
+ *   lights: {spots: 4, chandeliers: 1},
+ *   extras: ["cornice", "led"], timing: "week"
+ * }
+ * Длины для доп. работ оцениваются по площади как для квадратной комнаты:
+ *   perimeter = 4·√S (подсветка, парящий профиль), wall = √S (карниз/ниша — одна стена).
+ */
+(function (root) {
+  "use strict";
+
+  function num(v) {
+    var n = Number(v);
+    return isFinite(n) && n > 0 ? n : 0;
+  }
+
+  function estimate(answers, pricing) {
+    var a = answers || {};
+    var p = pricing;
+    var area = Math.max(num(a.area), p.min_area);
+    var side = Math.sqrt(area);
+    var lengths = { perimeter: 4 * side, wall: side };
+
+    var canvas = (p.canvas_per_m2[a.canvas] || 0) * area * (p.room_coef[a.room] || 1);
+
+    var lights = 0;
+    var chosenLights = a.lights || {};
+    for (var key in p.light) {
+      if (Object.prototype.hasOwnProperty.call(p.light, key)) {
+        lights += Math.floor(num(chosenLights[key])) * p.light[key];
+      }
+    }
+
+    var extras = 0;
+    var chosenExtras = Array.isArray(a.extras) ? a.extras : [];
+    for (var i = 0; i < chosenExtras.length; i++) {
+      var e = p.extras[chosenExtras[i]];
+      if (!e) continue;
+      extras += e.per === "item" ? e.price : e.price * (lengths[e.length] || 0);
+    }
+
+    var total = (canvas + lights + extras) * (p.timing_coef[a.timing] || 1);
+    total = Math.max(total, p.min_total);
+
+    var step = p.round_to || 1;
+    var round = function (x) { return Math.round(x / step) * step; };
+
+    return {
+      min: round(total * p.range[0]),
+      max: round(total * p.range[1]),
+      parts: {
+        canvas: Math.round(canvas),
+        lights: Math.round(lights),
+        extras: Math.round(extras)
+      }
+    };
+  }
+
+  root.QuizCalc = { estimate: estimate };
+  if (typeof module !== "undefined" && module.exports) module.exports = { estimate: estimate };
+})(typeof window !== "undefined" ? window : globalThis);
+
+</script>
+<script>window.QUIZ_CONFIG = {"company": {"name": "УютСтрой", "tagline": "Натяжные потолки · Самара", "phone": "+7 (846) 225-02-13", "badges": ["Бесплатный замер", "Монтаж за 1 день", "Расчёт за 1 минуту"]}, "texts": {"title": "Рассчитайте стоимость натяжного потолка за 1 минуту", "subtitle": "Ответьте на 6 коротких вопросов — сразу покажем примерную цену для Самара.", "result_title": "Ваш предварительный расчёт", "result_note": "Точную цену назовёт замерщик — замер бесплатный и ни к чему не обязывает.", "form_title": "Куда отправить расчёт и фото похожих работ?", "submit": "Получить расчёт", "thanks_title": "Спасибо! Заявка принята", "thanks_text": "Свяжемся с вами в течение 15 минут в рабочее время (9:00–21:00)."}, "currency": "₽", "messengers": [{"value": "telegram", "label": "Telegram"}, {"value": "whatsapp", "label": "WhatsApp"}, {"value": "max", "label": "MAX"}, {"value": "call", "label": "Позвоните мне"}], "steps": [{"id": "room", "type": "single", "short": "Помещение", "title": "Какое помещение?", "options": [{"value": "living", "label": "Гостиная / спальня", "icon": "🛋️"}, {"value": "kitchen", "label": "Кухня", "icon": "🍳"}, {"value": "bath", "label": "Ванная / санузел", "icon": "🛁"}, {"value": "hall", "label": "Коридор", "icon": "🚪"}, {"value": "flat", "label": "Вся квартира", "icon": "🏠"}, {"value": "office", "label": "Офис / коммерция", "icon": "🏢"}]}, {"id": "area", "type": "range", "short": "Площадь", "title": "Какая площадь потолка?", "hint": "Можно примерно — точно измерим на замере", "min": 3, "max": 150, "step": 1, "default": 18, "unit": "м²"}, {"id": "canvas", "type": "single", "short": "Полотно", "title": "Какое полотно хотите?", "options": [{"value": "mat", "label": "Матовое", "hint": "классика, как ровная побелка", "icon": "⬜"}, {"value": "satin", "label": "Сатиновое", "hint": "мягкий перламутровый отлив", "icon": "🌫️"}, {"value": "gloss", "label": "Глянцевое", "hint": "визуально увеличивает комнату", "icon": "✨"}, {"value": "fabric", "label": "Тканевое", "hint": "премиум, «дышащее» полотно", "icon": "🧵"}]}, {"id": "lights", "type": "counters", "short": "Освещение", "title": "Сколько светильников установить?", "hint": "Если не знаете — оставьте как есть, подскажем на замере", "items": [{"id": "spots", "label": "Точечные светильники", "min": 0, "max": 40, "default": 4}, {"id": "chandeliers", "label": "Люстры", "min": 0, "max": 6, "default": 1}]}, {"id": "extras", "type": "multi", "short": "Доп. работы", "title": "Что ещё нужно?", "hint": "Можно выбрать несколько или пропустить", "options": [{"value": "cornice", "label": "Скрытый карниз", "icon": "🪟"}, {"value": "niche", "label": "Ниша под шторы", "icon": "📐"}, {"value": "led", "label": "LED-подсветка по периметру", "icon": "💡"}, {"value": "floating", "label": "Парящий профиль", "icon": "🪶"}]}, {"id": "timing", "type": "single", "short": "Сроки", "title": "Когда планируете монтаж?", "options": [{"value": "asap", "label": "Как можно скорее", "icon": "⚡"}, {"value": "week", "label": "В течение недели", "icon": "📅"}, {"value": "month", "label": "В течение месяца", "icon": "🗓️"}, {"value": "later", "label": "Пока прицениваюсь", "icon": "🔍"}]}], "pricing": {"canvas_per_m2": {"mat": 450, "satin": 520, "gloss": 590, "fabric": 1350}, "room_coef": {"living": 1.0, "kitchen": 1.05, "bath": 1.12, "hall": 1.08, "flat": 0.95, "office": 1.0}, "min_area": 6, "light": {"spots": 450, "chandeliers": 750}, "extras": {"cornice": {"per": "m", "length": "wall", "price": 1600}, "niche": {"per": "m", "length": "wall", "price": 2200}, "led": {"per": "m", "length": "perimeter", "price": 1100}, "floating": {"per": "m", "length": "perimeter", "price": 900}}, "timing_coef": {"asap": 1.05, "week": 1.0, "month": 0.97, "later": 1.0}, "range": [0.92, 1.18], "min_total": 6000, "round_to": 100}};
+window.QUIZ_DEMO = true;</script>
+<script>
+(async function () {
+  "use strict";
+  const $ = (s, el = document) => el.querySelector(s);
+  const $$ = (s, el = document) => Array.from(el.querySelectorAll(s));
+  const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const fmt = (n) => new Intl.NumberFormat("ru-RU").format(n);
+  const stepEl = $("#step"), bar = $("#bar"), plabel = $("#plabel"), quizEl = $("#quiz");
+
+  let cfg;
+  try {
+    if (window.QUIZ_CONFIG) { cfg = window.QUIZ_CONFIG; }
+    else { const r = await fetch("config.json", { cache: "no-store" }); cfg = await r.json(); }
+  } catch (e) {
+    stepEl.innerHTML = '<p class="err">Не удалось загрузить квиз. Обновите страницу или позвоните нам.</p>';
+    return;
+  }
+  const T = cfg.texts, steps = cfg.steps, startedAt = Date.now();
+  const state = { i: 0, answers: {}, messenger: cfg.messengers[0].value, estimate: null };
+
+  for (const s of steps) {
+    if (s.type === "range") state.answers[s.id] = s.default;
+    if (s.type === "multi") state.answers[s.id] = [];
+    if (s.type === "counters") {
+      state.answers[s.id] = {};
+      for (const it of s.items) state.answers[s.id][it.id] = it.default || 0;
+    }
+  }
+
+  // --- шапка из конфига ---
+  const C = cfg.company;
+  $("#cname").textContent = C.name; $("#fname").textContent = C.name;
+  $("#ctag").textContent = C.tagline; $("#logo").textContent = C.name.trim()[0] || "•";
+  $("#cphone").textContent = C.phone; $("#cphone").href = "tel:+" + C.phone.replace(/\D/g, "");
+  $("#title").textContent = T.title; $("#subtitle").textContent = T.subtitle;
+  $("#badges").innerHTML = (C.badges || []).map((b) => `<li>${esc(b)}</li>`).join("");
+
+  function setProgress() {
+    const total = steps.length;
+    const done = Math.min(state.i, total);
+    bar.style.width = Math.round((done / total) * 100) + "%";
+    plabel.textContent = state.i < total ? `Шаг ${state.i + 1} из ${total}` : "Расчёт готов";
+  }
+
+  function answered(s) {
+    if (s.type === "single") return !!state.answers[s.id];
+    return true;
+  }
+
+  function go(delta) {
+    state.i = Math.max(0, Math.min(steps.length, state.i + delta));
+    render();
+    const top = quizEl.getBoundingClientRect().top;
+    if (top < 0) quizEl.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  function navHTML(s) {
+    const last = state.i === steps.length - 1;
+    return `<div class="nav">${state.i > 0 ? '<button type="button" class="btn btn-ghost" id="back">Назад</button>' : ""}` +
+      `<button type="button" class="btn btn-primary" id="next" ${s && !answered(s) ? "disabled" : ""}>${last ? "Показать расчёт →" : "Далее →"}</button></div>`;
+  }
+
+  function render() {
+    setProgress();
+    const s = steps[state.i];
+    if (!s) return renderResult();
+    let body = "";
+    if (s.type === "single" || s.type === "multi") {
+      body = '<div class="opts">' + s.options.map((o) => {
+        const on = s.type === "single" ? state.answers[s.id] === o.value : state.answers[s.id].includes(o.value);
+        return `<button type="button" class="opt" data-v="${esc(o.value)}" aria-pressed="${on}">` +
+          `<span class="tick"></span><span class="ic">${o.icon || ""}</span><b>${esc(o.label)}</b>` +
+          `${o.hint ? `<small>${esc(o.hint)}</small>` : ""}</button>`;
+      }).join("") + "</div>";
+    } else if (s.type === "range") {
+      const v = state.answers[s.id];
+      body = `<div class="range-val"><span id="rv">${v}</span> <small>${esc(s.unit || "")}</small></div>` +
+        `<input type="range" id="rng" min="${s.min}" max="${s.max}" step="${s.step}" value="${v}" aria-label="${esc(s.title)}">` +
+        `<div class="range-row">Точное значение: <input class="num" id="rnum" type="number" inputmode="decimal" min="${s.min}" max="${s.max}" value="${v}"> ${esc(s.unit || "")}</div>`;
+    } else if (s.type === "counters") {
+      body = s.items.map((it) => `<div class="counter"><span>${esc(it.label)}</span><div class="stepper" data-id="${esc(it.id)}">` +
+        `<button type="button" data-d="-1" aria-label="Меньше">−</button><output>${state.answers[s.id][it.id]}</output>` +
+        `<button type="button" data-d="1" aria-label="Больше">+</button></div></div>`).join("");
+    }
+    stepEl.innerHTML = `<div class="fade"><h2 class="q">${esc(s.title)}</h2><p class="hint">${esc(s.hint || "")}</p>${body}${navHTML(s)}</div>`;
+    bindStep(s);
+  }
+
+  function bindStep(s) {
+    const next = $("#next"), back = $("#back");
+    if (back) back.onclick = () => go(-1);
+    next.onclick = () => go(1);
+    if (s.type === "single") {
+      $$(".opt", stepEl).forEach((b) => b.onclick = () => {
+        state.answers[s.id] = b.dataset.v;
+        $$(".opt", stepEl).forEach((x) => x.setAttribute("aria-pressed", x === b));
+        next.disabled = false;
+        setTimeout(() => { if (steps[state.i] === s) go(1); }, 260);
+      });
+    } else if (s.type === "multi") {
+      $$(".opt", stepEl).forEach((b) => b.onclick = () => {
+        const arr = state.answers[s.id], v = b.dataset.v, k = arr.indexOf(v);
+        if (k >= 0) arr.splice(k, 1); else arr.push(v);
+        b.setAttribute("aria-pressed", k < 0);
+      });
+    } else if (s.type === "range") {
+      const rng = $("#rng"), num = $("#rnum"), rv = $("#rv");
+      const set = (val, from) => {
+        let v = Number(val);
+        if (!isFinite(v)) return;
+        v = Math.min(s.max, Math.max(s.min, v));
+        state.answers[s.id] = v; rv.textContent = v;
+        if (from !== "rng") rng.value = v;
+        if (from !== "num") num.value = v;
+      };
+      rng.oninput = () => set(rng.value, "rng");
+      num.oninput = () => { if (num.value !== "") set(num.value, "num"); };
+      num.onblur = () => set(num.value || s.default, "");
+    } else if (s.type === "counters") {
+      $$(".stepper", stepEl).forEach((st) => {
+        const it = s.items.find((x) => x.id === st.dataset.id), out = $("output", st);
+        $$("button", st).forEach((b) => b.onclick = () => {
+          const v = Math.min(it.max, Math.max(it.min, state.answers[s.id][it.id] + Number(b.dataset.d)));
+          state.answers[s.id][it.id] = v; out.textContent = v;
+        });
+      });
+    }
+  }
+
+  function maskPhone(v) {
+    let d = v.replace(/\D/g, "");
+    if (!d) return "";
+    if (d[0] === "8") d = "7" + d.slice(1);
+    if (d[0] !== "7") d = "7" + d;
+    const p = d.slice(1, 11);
+    let out = "+7";
+    if (p.length) out += " (" + p.slice(0, 3);
+    // разделители ставим только перед следующей цифрой — иначе Backspace «застревает» на скобке/дефисе
+    if (p.length > 3) out += ") " + p.slice(3, 6);
+    if (p.length > 6) out += "-" + p.slice(6, 8);
+    if (p.length > 8) out += "-" + p.slice(8, 10);
+    return out;
+  }
+
+  function renderResult() {
+    const est = QuizCalc.estimate(state.answers, cfg.pricing);
+    state.estimate = est;
+    const cur = esc(cfg.currency);
+    stepEl.innerHTML = `<div class="fade">
+      <div class="result">
+        <p class="hint" style="margin:0">${esc(T.result_title)}</p>
+        <div class="price"><span>от ${fmt(est.min)} до ${fmt(est.max)} ${cur}</span></div>
+        <p class="hint">${esc(T.result_note)}</p>
+      </div>
+      <div class="breakdown">
+        <div>Полотно<b>${fmt(est.parts.canvas)} ${cur}</b></div>
+        <div>Освещение<b>${fmt(est.parts.lights)} ${cur}</b></div>
+        <div>Доп. работы<b>${fmt(est.parts.extras)} ${cur}</b></div>
+      </div>
+      <form id="lead" novalidate>
+        <h2 class="q" style="margin-top:22px">${esc(T.form_title)}</h2>
+        <div class="field"><label class="lbl" for="name">Ваше имя</label>
+          <input class="in" id="name" name="name" autocomplete="given-name" maxlength="60" placeholder="Например, Анна"></div>
+        <div class="field"><label class="lbl" for="phone">Телефон</label>
+          <input class="in" id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__"></div>
+        <div class="field"><span class="lbl">Где удобнее получить расчёт?</span>
+          <div class="chips" id="msgr">${cfg.messengers.map((m) =>
+            `<button type="button" class="chip" data-v="${esc(m.value)}" aria-pressed="${m.value === state.messenger}">${esc(m.label)}</button>`).join("")}</div></div>
+        <div class="hp" aria-hidden="true"><label>Ваш сайт <input name="website" tabindex="-1" autocomplete="off"></label></div>
+        <label class="consent"><input type="checkbox" id="consent">
+          <span>Я даю согласие на <a href="privacy.html" target="_blank" rel="noopener">обработку персональных данных</a> и принимаю политику конфиденциальности</span></label>
+        <div class="err" id="err" role="alert"></div>
+        <div class="nav"><button type="button" class="btn btn-ghost" id="back">Назад</button>
+          <button class="btn btn-primary" id="send" type="submit">${esc(T.submit)}</button></div>
+      </form></div>`;
+
+    const form = $("#lead"), phone = $("#phone"), name = $("#name"), err = $("#err"), send = $("#send");
+    $("#back").onclick = () => go(-1);
+    phone.addEventListener("input", () => { phone.value = maskPhone(phone.value); phone.classList.remove("bad"); });
+    phone.addEventListener("focus", () => { if (!phone.value) phone.value = "+7 ("; });
+    name.addEventListener("input", () => name.classList.remove("bad"));
+    $$(".chip", form).forEach((c) => c.onclick = () => {
+      state.messenger = c.dataset.v;
+      $$(".chip", form).forEach((x) => x.setAttribute("aria-pressed", x === c));
+    });
+    const fail = (msg, el) => { err.textContent = msg; if (el) { el.classList.add("bad"); el.focus(); } };
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      err.textContent = "";
+      const nm = name.value.trim(), digits = phone.value.replace(/\D/g, "");
+      if (nm.length < 2) return fail("Пожалуйста, укажите имя", name);
+      if (digits.length !== 11) return fail("Проверьте номер телефона — нужно 10 цифр после +7", phone);
+      if (!$("#consent").checked) return fail("Нужно согласие на обработку персональных данных");
+      if (window.QUIZ_DEMO) { renderDemoSent(nm, digits, est); return; }
+      send.disabled = true; send.textContent = "Отправляем…";
+      try {
+        const r = await fetch("lead", {
+          method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: nm, phone: digits, messenger: state.messenger, consent: true,
+            answers: state.answers, estimate: { min: est.min, max: est.max },
+            website: form.website.value, started_at: startedAt, page: location.href
+          })
+        });
+        const j = await r.json().catch(() => ({}));
+        if (!r.ok || !j.ok) throw new Error(j.error || "Не удалось отправить заявку");
+        renderThanks();
+      } catch (ex) {
+        fail(ex.message + ". Можно позвонить нам: " + C.phone);
+        send.disabled = false; send.textContent = T.submit;
+      }
+    });
+  }
+
+
+  function renderDemoSent(nm, digits, est) {
+    bar.style.width = "100%"; plabel.textContent = "Демо";
+    const a = state.answers;
+    const labelOf = (id, v) => {
+      const s = steps.find((x) => x.id === id);
+      const o = s && s.options ? s.options.find((x) => x.value === v) : null;
+      return o ? o.label : (v == null ? "—" : String(v));
+    };
+    const m = cfg.messengers.find((x) => x.value === state.messenger);
+    const lines = [
+      "🔔 Новая заявка с квиза",
+      "Имя: " + nm,
+      "Телефон: " + maskPhone(digits),
+      "Помещение: " + labelOf("room", a.room),
+      "Площадь: " + (a.area == null ? "—" : a.area + " м²"),
+      "Полотно: " + labelOf("canvas", a.canvas),
+      "Расчёт: от " + fmt(est.min) + " до " + fmt(est.max) + " " + cfg.currency,
+      "Связаться: " + (m ? m.label : "—")
+    ];
+    stepEl.innerHTML = `<div class="thanks fade"><div class="big">📲</div>
+      <h2>Демо: эта заявка пришла бы вам в Telegram</h2>
+      <p class="hint">В рабочей версии она мгновенно приходит владельцу и менеджерам — вот так:</p>
+      <div class="tgmsg">${lines.map(esc).join("<br>")}</div>
+      <p class="hint">Ничего никуда не отправлено — это демонстрация.</p></div>`;
+  }
+
+  function renderThanks() {
+    bar.style.width = "100%"; plabel.textContent = "Готово";
+    stepEl.innerHTML = `<div class="thanks fade"><div class="big">✅</div><h2>${esc(T.thanks_title)}</h2>
+      <p class="hint">${esc(T.thanks_text)}</p><p><a class="phone" href="tel:+${C.phone.replace(/\D/g, "")}">${esc(C.phone)}</a></p></div>`;
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>
