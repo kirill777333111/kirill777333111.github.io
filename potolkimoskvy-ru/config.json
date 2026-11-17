@@ -1,0 +1,282 @@
+{
+  "company": {
+    "name": "potolkimoskvy.ru",
+    "tagline": "Натяжные потолки · Москва",
+    "phone": "+7 (926) 973-73-19",
+    "badges": [
+      "Расчёт за 1 минуту"
+    ]
+  },
+  "images": {
+    "hero": "assets/hero.webp",
+    "result": "assets/result.webp"
+  },
+  "texts": {
+    "title": "Рассчитайте стоимость натяжного потолка за 1 минуту",
+    "subtitle": "Ответьте на 6 коротких вопросов — сразу покажем примерную цену для Москва.",
+    "result_title": "Ваш предварительный расчёт",
+    "result_note": "Точную цену назовёт замерщик — замер бесплатный и ни к чему не обязывает.",
+    "form_title": "Куда отправить расчёт и фото похожих работ?",
+    "submit": "Получить расчёт",
+    "thanks_title": "Спасибо! Заявка принята",
+    "thanks_text": "Свяжемся с вами в течение 15 минут в рабочее время (9:00–21:00).",
+    "cta": "Рассчитать стоимость"
+  },
+  "currency": "₽",
+  "messengers": [
+    {
+      "value": "telegram",
+      "label": "Telegram"
+    },
+    {
+      "value": "whatsapp",
+      "label": "WhatsApp"
+    },
+    {
+      "value": "max",
+      "label": "MAX"
+    },
+    {
+      "value": "call",
+      "label": "Позвоните мне"
+    }
+  ],
+  "steps": [
+    {
+      "id": "room",
+      "type": "single",
+      "short": "Помещение",
+      "title": "Какое помещение?",
+      "options": [
+        {
+          "value": "living",
+          "label": "Гостиная / спальня",
+          "icon": "🛋️",
+          "image": "assets/room-living.webp"
+        },
+        {
+          "value": "kitchen",
+          "label": "Кухня",
+          "icon": "🍳",
+          "image": "assets/room-kitchen.webp"
+        },
+        {
+          "value": "bath",
+          "label": "Ванная / санузел",
+          "icon": "🛁",
+          "image": "assets/room-bath.webp"
+        },
+        {
+          "value": "hall",
+          "label": "Коридор",
+          "icon": "🚪",
+          "image": "assets/room-hall.webp"
+        },
+        {
+          "value": "flat",
+          "label": "Вся квартира",
+          "icon": "🏠",
+          "image": "assets/room-flat.webp"
+        },
+        {
+          "value": "office",
+          "label": "Офис / коммерция",
+          "icon": "🏢",
+          "image": "assets/room-office.webp"
+        }
+      ]
+    },
+    {
+      "id": "area",
+      "type": "range",
+      "short": "Площадь",
+      "title": "Какая площадь потолка?",
+      "hint": "Можно примерно — точно измерим на замере",
+      "image": "assets/area.webp",
+      "min": 3,
+      "max": 150,
+      "step": 1,
+      "default": 18,
+      "unit": "м²"
+    },
+    {
+      "id": "canvas",
+      "type": "single",
+      "short": "Полотно",
+      "title": "Какое полотно хотите?",
+      "options": [
+        {
+          "value": "mat",
+          "label": "Матовое",
+          "hint": "классика, как ровная побелка",
+          "icon": "⬜",
+          "image": "assets/canvas-mat.webp"
+        },
+        {
+          "value": "satin",
+          "label": "Сатиновое",
+          "hint": "мягкий перламутровый отлив",
+          "icon": "🌫️",
+          "image": "assets/canvas-satin.webp"
+        },
+        {
+          "value": "gloss",
+          "label": "Глянцевое",
+          "hint": "визуально увеличивает комнату",
+          "icon": "✨",
+          "image": "assets/canvas-gloss.webp"
+        },
+        {
+          "value": "fabric",
+          "label": "Тканевое",
+          "hint": "премиум, «дышащее» полотно",
+          "icon": "🧵",
+          "image": "assets/canvas-fabric.webp"
+        }
+      ]
+    },
+    {
+      "id": "lights",
+      "type": "counters",
+      "short": "Освещение",
+      "title": "Сколько светильников установить?",
+      "hint": "Если не знаете — оставьте как есть, подскажем на замере",
+      "image": "assets/lights.webp",
+      "items": [
+        {
+          "id": "spots",
+          "label": "Точечные светильники",
+          "min": 0,
+          "max": 40,
+          "default": 4,
+          "image": "assets/light-spots.webp"
+        },
+        {
+          "id": "chandeliers",
+          "label": "Люстры",
+          "min": 0,
+          "max": 6,
+          "default": 1,
+          "image": "assets/light-chandelier.webp"
+        }
+      ]
+    },
+    {
+      "id": "extras",
+      "type": "multi",
+      "short": "Доп. работы",
+      "title": "Что ещё нужно?",
+      "hint": "Можно выбрать несколько или пропустить",
+      "options": [
+        {
+          "value": "cornice",
+          "label": "Скрытый карниз",
+          "icon": "🪟",
+          "image": "assets/extra-cornice.webp"
+        },
+        {
+          "value": "niche",
+          "label": "Ниша под шторы",
+          "icon": "📐",
+          "image": "assets/extra-niche.webp"
+        },
+        {
+          "value": "led",
+          "label": "LED-подсветка, световые линии",
+          "icon": "💡",
+          "image": "assets/extra-led.webp"
+        },
+        {
+          "value": "floating",
+          "label": "Парящий потолок",
+          "icon": "🪶",
+          "image": "assets/extra-floating.webp"
+        }
+      ]
+    },
+    {
+      "id": "timing",
+      "type": "single",
+      "short": "Сроки",
+      "title": "Когда планируете монтаж?",
+      "options": [
+        {
+          "value": "asap",
+          "label": "Как можно скорее",
+          "icon": "⚡"
+        },
+        {
+          "value": "week",
+          "label": "В течение недели",
+          "icon": "📅"
+        },
+        {
+          "value": "month",
+          "label": "В течение месяца",
+          "icon": "🗓️"
+        },
+        {
+          "value": "later",
+          "label": "Пока прицениваюсь",
+          "icon": "🔍"
+        }
+      ]
+    }
+  ],
+  "pricing": {
+    "canvas_per_m2": {
+      "mat": 450,
+      "satin": 520,
+      "gloss": 590,
+      "fabric": 1350
+    },
+    "room_coef": {
+      "living": 1.0,
+      "kitchen": 1.05,
+      "bath": 1.12,
+      "hall": 1.08,
+      "flat": 0.95,
+      "office": 1.0
+    },
+    "min_area": 6,
+    "light": {
+      "spots": 450,
+      "chandeliers": 750
+    },
+    "extras": {
+      "cornice": {
+        "per": "m",
+        "length": "wall",
+        "price": 1600
+      },
+      "niche": {
+        "per": "m",
+        "length": "wall",
+        "price": 2200
+      },
+      "led": {
+        "per": "m",
+        "length": "perimeter",
+        "price": 1100
+      },
+      "floating": {
+        "per": "m",
+        "length": "perimeter",
+        "price": 900
+      }
+    },
+    "timing_coef": {
+      "asap": 1.05,
+      "week": 1.0,
+      "month": 0.97,
+      "later": 1.0
+    },
+    "range": [
+      0.92,
+      1.18
+    ],
+    "min_total": 6000,
+    "round_to": 100
+  },
+  "asset_prefix": "../"
+}
