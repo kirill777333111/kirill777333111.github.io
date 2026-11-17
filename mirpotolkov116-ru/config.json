@@ -8,6 +8,10 @@
       "Расчёт за 1 минуту"
     ]
   },
+  "images": {
+    "hero": "assets/hero.webp",
+    "result": "assets/result.webp"
+  },
   "texts": {
     "title": "Рассчитайте стоимость натяжного потолка за 1 минуту",
     "subtitle": "Ответьте на 6 коротких вопросов — сразу покажем примерную цену для Казань.",
@@ -16,7 +20,8 @@
     "form_title": "Куда отправить расчёт и фото похожих работ?",
     "submit": "Получить расчёт",
     "thanks_title": "Спасибо! Заявка принята",
-    "thanks_text": "Свяжемся с вами в течение 15 минут в рабочее время (9:00–21:00)."
+    "thanks_text": "Свяжемся с вами в течение 15 минут в рабочее время (9:00–21:00).",
+    "cta": "Рассчитать стоимость"
   },
   "currency": "₽",
   "messengers": [
@@ -47,32 +52,38 @@
         {
           "value": "living",
           "label": "Гостиная / спальня",
-          "icon": "🛋️"
+          "icon": "🛋️",
+          "image": "assets/room-living.webp"
         },
         {
           "value": "kitchen",
           "label": "Кухня",
-          "icon": "🍳"
+          "icon": "🍳",
+          "image": "assets/room-kitchen.webp"
         },
         {
           "value": "bath",
           "label": "Ванная / санузел",
-          "icon": "🛁"
+          "icon": "🛁",
+          "image": "assets/room-bath.webp"
         },
         {
           "value": "hall",
           "label": "Коридор",
-          "icon": "🚪"
+          "icon": "🚪",
+          "image": "assets/room-hall.webp"
         },
         {
           "value": "flat",
           "label": "Вся квартира",
-          "icon": "🏠"
+          "icon": "🏠",
+          "image": "assets/room-flat.webp"
         },
         {
           "value": "office",
           "label": "Офис / коммерция",
-          "icon": "🏢"
+          "icon": "🏢",
+          "image": "assets/room-office.webp"
         }
       ]
     },
@@ -82,6 +93,7 @@
       "short": "Площадь",
       "title": "Какая площадь потолка?",
       "hint": "Можно примерно — точно измерим на замере",
+      "image": "assets/area.webp",
       "min": 3,
       "max": 150,
       "step": 1,
@@ -98,25 +110,29 @@
           "value": "mat",
           "label": "Матовое",
           "hint": "классика, как ровная побелка",
-          "icon": "⬜"
+          "icon": "⬜",
+          "image": "assets/canvas-mat.webp"
         },
         {
           "value": "satin",
           "label": "Сатиновое",
           "hint": "мягкий перламутровый отлив",
-          "icon": "🌫️"
+          "icon": "🌫️",
+          "image": "assets/canvas-satin.webp"
         },
         {
           "value": "gloss",
           "label": "Глянцевое",
           "hint": "визуально увеличивает комнату",
-          "icon": "✨"
+          "icon": "✨",
+          "image": "assets/canvas-gloss.webp"
         },
         {
           "value": "fabric",
           "label": "Тканевое",
           "hint": "премиум, «дышащее» полотно",
-          "icon": "🧵"
+          "icon": "🧵",
+          "image": "assets/canvas-fabric.webp"
         }
       ]
     },
@@ -126,20 +142,23 @@
       "short": "Освещение",
       "title": "Сколько светильников установить?",
       "hint": "Если не знаете — оставьте как есть, подскажем на замере",
+      "image": "assets/lights.webp",
       "items": [
         {
           "id": "spots",
           "label": "Точечные светильники",
           "min": 0,
           "max": 40,
-          "default": 4
+          "default": 4,
+          "image": "assets/light-spots.webp"
         },
         {
           "id": "chandeliers",
           "label": "Люстры",
           "min": 0,
           "max": 6,
-          "default": 1
+          "default": 1,
+          "image": "assets/light-chandelier.webp"
         }
       ]
     },
@@ -153,22 +172,26 @@
         {
           "value": "cornice",
           "label": "Скрытый карниз",
-          "icon": "🪟"
+          "icon": "🪟",
+          "image": "assets/extra-cornice.webp"
         },
         {
           "value": "niche",
           "label": "Ниша под шторы",
-          "icon": "📐"
+          "icon": "📐",
+          "image": "assets/extra-niche.webp"
         },
         {
           "value": "led",
-          "label": "LED-подсветка по периметру",
-          "icon": "💡"
+          "label": "LED-подсветка, световые линии",
+          "icon": "💡",
+          "image": "assets/extra-led.webp"
         },
         {
           "value": "floating",
-          "label": "Парящий профиль",
-          "icon": "🪶"
+          "label": "Парящий потолок",
+          "icon": "🪶",
+          "image": "assets/extra-floating.webp"
         }
       ]
     },
@@ -255,5 +278,6 @@
     ],
     "min_total": 6000,
     "round_to": 100
-  }
+  },
+  "asset_prefix": "../"
 }

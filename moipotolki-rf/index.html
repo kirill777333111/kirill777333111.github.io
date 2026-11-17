@@ -10,9 +10,10 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <style>
   :root {
-    --bg: #f4f6fb; --card: #fff; --text: #0f172a; --muted: #64748b; --line: #e2e8f0;
-    --accent: #dd1818; --accent-2: #bd5114; --accent-soft: #fce8e8; --ok: #16a34a; --err: #dc2626;
-    --radius: 20px; --shadow: 0 12px 32px rgba(15, 23, 42, .08);
+    --bg: #f4f1ec; --card: #fff; --text: #16130f; --muted: #6f6a63; --line: #e9e3da; --ok: #16a34a; --err: #dc2626;
+    --accent: #dd1818; --accent-2: #bd5114; --accent-soft: #fce8e8;
+    --radius: 28px; --shadow: 0 30px 70px rgba(28, 20, 10, .14), 0 2px 6px rgba(28, 20, 10, .05);
+    --ease: cubic-bezier(.2, .75, .2, 1);
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; }
@@ -20,59 +21,132 @@
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     background: var(--bg); color: var(--text); line-height: 1.45; -webkit-font-smoothing: antialiased;
   }
-  .wrap { max-width: 680px; margin: 0 auto; padding: 14px 16px 0; }
-  header.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 6px 0; }
+  img { display: block; max-width: 100%; }
+
+  /* ---------- первый экран ---------- */
+  .page { max-width: 1320px; margin: 0 auto; }
+  .hero {
+    position: relative; overflow: hidden; color: #fff; display: flex; flex-direction: column;
+    min-height: min(84vh, 680px); border-radius: 0 0 32px 32px;
+    background: #2a241f radial-gradient(120% 80% at 50% 0%, #6b5a4a 0%, #2a241f 70%);
+  }
+  .hero-img {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    opacity: 0; transform: scale(1.08); transition: opacity 1s ease, transform 7s var(--ease);
+  }
+  .hero-img.loaded { opacity: 1; transform: scale(1); }
+  .hero-shade {
+    position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(180deg, rgba(10, 8, 6, .55) 0%, rgba(10, 8, 6, 0) 26%, rgba(10, 8, 6, .05) 46%, rgba(10, 8, 6, .82) 100%);
+  }
+  header.top {
+    position: relative; z-index: 2; display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; padding: 16px 16px 0;
+  }
   .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; letter-spacing: -.01em; min-width: 0; }
+  .brand span { text-shadow: 0 1px 12px rgba(0, 0, 0, .35); }
   .logo {
-    width: 38px; height: 38px; border-radius: 12px; flex: none; color: #fff; font-weight: 900;
+    width: 40px; height: 40px; border-radius: 13px; flex: none; color: #fff; font-weight: 900;
     background: linear-gradient(135deg, var(--accent), var(--accent-2)); display: grid; place-items: center;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, .25), inset 0 0 0 1px rgba(255, 255, 255, .25);
   }
-  .brand small { display: block; font-weight: 500; color: var(--muted); font-size: 12px; }
-  .phone { color: var(--text); text-decoration: none; font-weight: 700; font-size: 14px; white-space: nowrap; }
-  .hero { padding: 12px 0 4px; }
-  .hero h1 { font-size: clamp(23px, 6vw, 34px); line-height: 1.15; margin: 4px 0 8px; letter-spacing: -.02em; }
-  .hero p { margin: 0; color: var(--muted); }
-  .badges { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 0; padding: 0; list-style: none; }
+  .brand small { display: block; font-weight: 500; color: rgba(255, 255, 255, .78); font-size: 12px; }
+  .phone {
+    color: #fff; text-decoration: none; font-weight: 700; font-size: 13.5px; white-space: nowrap;
+    padding: 9px 13px; border-radius: 999px; background: rgba(255, 255, 255, .16);
+    border: 1px solid rgba(255, 255, 255, .28); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  }
+  .hero-text { position: relative; z-index: 2; margin-top: auto; padding: 0 18px 62px; }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 800; letter-spacing: .08em;
+    text-transform: uppercase; color: rgba(255, 255, 255, .85); margin-bottom: 10px;
+  }
+  .eyebrow::before { content: ""; width: 22px; height: 2px; background: currentColor; border-radius: 2px; }
+  .hero h1 {
+    font-size: clamp(30px, 8.6vw, 54px); line-height: 1.04; margin: 0 0 12px; letter-spacing: -.035em;
+    font-weight: 850; text-shadow: 0 2px 30px rgba(0, 0, 0, .35); text-wrap: balance;
+  }
+  .hero p { margin: 0; color: rgba(255, 255, 255, .86); font-size: 15.5px; max-width: 34em; }
+  .badges { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 0; padding: 0; list-style: none; }
   .badges li {
-    background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px;
-    font-size: 13px; font-weight: 600;
+    background: rgba(255, 255, 255, .14); border: 1px solid rgba(255, 255, 255, .24); color: #fff;
+    border-radius: 999px; padding: 7px 12px; font-size: 12.5px; font-weight: 650;
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
   }
-  .badges li::before { content: "✓ "; color: var(--ok); font-weight: 900; }
-  .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; margin-top: 16px; }
-  .progress { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
-  .progress .bar { flex: 1; height: 8px; background: var(--accent-soft); border-radius: 99px; overflow: hidden; }
+  .badges li::before { content: "✓ "; color: #86efac; font-weight: 900; }
+  .btn-hero {
+    margin-top: 20px; width: 100%; background: #fff; color: var(--text);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, .3);
+  }
+
+  /* ---------- карточка квиза ---------- */
+  .side { position: relative; z-index: 3; margin-top: -40px; padding: 0 12px; }
+  .card {
+    background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px 16px 20px;
+    border: 1px solid rgba(255, 255, 255, .7); scroll-margin-top: 12px;
+  }
+  .progress { display: flex; align-items: center; gap: 12px; margin: 2px 2px 16px; }
+  .progress .bar { flex: 1; height: 6px; background: #f1ece5; border-radius: 99px; overflow: hidden; }
   .progress .bar i {
     display: block; height: 100%; width: 0; border-radius: 99px;
-    background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width .35s ease;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width .5s var(--ease);
   }
-  .progress span { font-size: 13px; color: var(--muted); font-weight: 700; white-space: nowrap; }
-  h2.q { font-size: 21px; line-height: 1.25; margin: 0 0 4px; letter-spacing: -.01em; }
+  .progress span { font-size: 12.5px; color: var(--muted); font-weight: 750; white-space: nowrap; letter-spacing: .01em; }
+  #step { transition: opacity .16s ease, transform .16s ease; }
+  #step.leaving { opacity: 0; transform: translateX(calc(var(--dir, 1) * -14px)); }
+  h2.q { font-size: 22px; line-height: 1.2; margin: 0 0 4px; letter-spacing: -.02em; }
   .hint { color: var(--muted); font-size: 14px; margin: 0 0 14px; min-height: 1px; }
+
+  .media {
+    position: relative; overflow: hidden; border-radius: 20px; aspect-ratio: 16 / 9; margin: 0 0 16px;
+    background: linear-gradient(135deg, #ede6dc, #d9cfc2);
+  }
+  .media::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, .18));
+  }
+  .media img, .thumb img, .cthumb img, .res-hero img {
+    width: 100%; height: 100%; object-fit: cover; opacity: 0; transform: scale(1.04);
+    transition: opacity .6s ease, transform 1.2s var(--ease);
+  }
+  img.loaded { opacity: 1 !important; transform: none; }
+
   .opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .opt {
-    position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 6px;
-    padding: 14px 14px 14px; border: 2px solid var(--line); border-radius: 16px; background: #fff;
-    cursor: pointer; text-align: left; font: inherit; color: inherit;
-    transition: border-color .15s, transform .15s, background .15s;
+    position: relative; display: flex; flex-direction: column; align-items: stretch; gap: 8px;
+    padding: 14px; border: 2px solid var(--line); border-radius: 18px; background: #fff;
+    cursor: pointer; text-align: left; font: inherit; color: inherit; overflow: hidden;
+    transition: border-color .2s, transform .2s var(--ease), box-shadow .2s, background .2s;
   }
-  .opt:hover { border-color: #f6c5c5; }
+  .opt:hover { border-color: #f6c5c5; transform: translateY(-2px); box-shadow: 0 10px 24px rgba(28, 20, 10, .08); }
   .opt:active { transform: scale(.98); }
   .opt:focus-visible, .btn:focus-visible, .chip:focus-visible, .stepper button:focus-visible {
     outline: 3px solid #f1a3a3; outline-offset: 2px;
   }
-  .opt[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+  .opt[aria-pressed="true"] {
+    border-color: var(--accent); background: var(--accent-soft);
+    box-shadow: 0 0 0 4px var(--accent-soft), 0 12px 26px rgba(28, 20, 10, .1);
+  }
   .opt .ic { font-size: 26px; line-height: 1; }
-  .opt b { font-size: 15px; padding-right: 20px; }
+  .opt .cap { display: flex; flex-direction: column; gap: 3px; }
+  .opt b { font-size: 15px; padding-right: 22px; line-height: 1.25; }
   .opt small { color: var(--muted); font-size: 12.5px; line-height: 1.3; }
+  .opt.pic { padding: 0; gap: 0; background: #fff; }
+  .opt.pic .thumb { display: block; aspect-ratio: 4 / 3; overflow: hidden; background: linear-gradient(135deg, #ede6dc, #d9cfc2); }
+  .opt.pic:hover .thumb img.loaded { transform: scale(1.05); }
+  .opt.pic .cap { padding: 10px 12px 12px; }
+  .opt.pic b { padding-right: 0; }
+  .opt.pic[aria-pressed="true"] { background: #fff; }
   .opt .tick {
-    position: absolute; top: 10px; right: 10px; width: 20px; height: 20px; border-radius: 50%;
-    border: 2px solid var(--line); background: #fff;
+    position: absolute; top: 10px; right: 10px; width: 22px; height: 22px; border-radius: 50%; z-index: 1;
+    border: 2px solid var(--line); background: rgba(255, 255, 255, .92);
   }
   .opt[aria-pressed="true"] .tick {
     border-color: var(--accent);
     background: var(--accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5L19 7'/%3E%3C/svg%3E") center / 12px no-repeat;
   }
-  .range-val { font-size: 44px; font-weight: 900; letter-spacing: -.02em; }
+
+  .range-val { font-size: 46px; font-weight: 900; letter-spacing: -.03em; line-height: 1.05; }
   .range-val small { font-size: 18px; color: var(--muted); font-weight: 700; }
   input[type=range] { width: 100%; accent-color: var(--accent); height: 34px; margin: 6px 0; }
   .range-row { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 14px; }
@@ -80,34 +154,50 @@
     width: 100px; padding: 10px 12px; border: 2px solid var(--line); border-radius: 12px;
     font: inherit; font-weight: 800; font-size: 16px; color: var(--text);
   }
-  .counter { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .counter { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); }
   .counter:last-child { border-bottom: 0; }
-  .counter span { font-weight: 600; }
+  .cthumb { width: 58px; height: 58px; border-radius: 16px; overflow: hidden; flex: none; background: #ece5db; }
+  .clabel { font-weight: 650; flex: 1; min-width: 0; }
   .stepper { display: flex; align-items: center; gap: 6px; }
   .stepper button {
-    width: 42px; height: 42px; border-radius: 12px; border: 2px solid var(--line); background: #fff;
+    width: 42px; height: 42px; border-radius: 13px; border: 2px solid var(--line); background: #fff;
     font-size: 22px; font-weight: 800; cursor: pointer; color: var(--text); line-height: 1;
   }
   .stepper output { min-width: 34px; text-align: center; font-weight: 900; font-size: 19px; }
+
   .nav { display: flex; gap: 10px; margin-top: 20px; }
-  .btn { appearance: none; border: 0; border-radius: 14px; padding: 15px 18px; font: inherit; font-weight: 800; cursor: pointer; font-size: 16px; }
+  .btn {
+    appearance: none; border: 0; border-radius: 16px; padding: 16px 18px; font: inherit; font-weight: 800;
+    cursor: pointer; font-size: 16px; transition: transform .15s var(--ease), box-shadow .2s, opacity .2s;
+  }
+  .btn:active { transform: scale(.98); }
   .btn-primary {
     flex: 1; color: #fff; background: linear-gradient(135deg, var(--accent), var(--accent-2));
-    box-shadow: 0 8px 20px rgba(221, 24, 24, .28);
+    box-shadow: 0 10px 24px rgba(221, 24, 24, .28);
   }
-  .btn-primary:disabled { opacity: .45; box-shadow: none; cursor: not-allowed; }
-  .btn-ghost { background: #f1f5f9; color: var(--text); }
-  .result { text-align: center; padding: 4px 0; }
-  .price { font-size: clamp(28px, 8.5vw, 42px); font-weight: 900; letter-spacing: -.02em; margin: 4px 0 6px; line-height: 1.1; }
-  .price span { background: linear-gradient(90deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-  .breakdown { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 12px 0 2px; }
-  .breakdown div { background: #f8fafc; border-radius: 12px; padding: 10px 6px; font-size: 12px; color: var(--muted); text-align: center; }
+  .btn-primary:disabled { opacity: .4; box-shadow: none; cursor: not-allowed; }
+  .btn-ghost { background: #f3eee8; color: var(--text); }
+
+  /* ---------- результат ---------- */
+  .res-hero {
+    position: relative; overflow: hidden; border-radius: 22px; aspect-ratio: 16 / 10; margin-bottom: 12px;
+    color: #fff; background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  }
+  .res-shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0, 0, 0, .05) 30%, rgba(0, 0, 0, .7)); }
+  .res-text { position: absolute; left: 18px; right: 18px; bottom: 16px; }
+  .res-text p { margin: 0 0 2px; font-size: 13px; font-weight: 700; color: rgba(255, 255, 255, .85); }
+  .price { font-size: clamp(27px, 8vw, 40px); font-weight: 900; letter-spacing: -.03em; line-height: 1.08; }
+  .res-note { text-align: center; }
+  .breakdown { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 10px 0 2px; }
+  .breakdown div { background: #f8f5f1; border-radius: 14px; padding: 10px 6px; font-size: 12px; color: var(--muted); text-align: center; }
   .breakdown b { display: block; color: var(--text); font-size: 14px; }
+
+  /* ---------- форма ---------- */
   .field { margin-top: 14px; }
   .lbl { display: block; font-size: 13px; font-weight: 700; color: var(--muted); margin-bottom: 6px; }
   .in {
-    width: 100%; padding: 14px; border: 2px solid var(--line); border-radius: 14px; font: inherit;
-    font-size: 16px; background: #fff; color: var(--text);
+    width: 100%; padding: 15px; border: 2px solid var(--line); border-radius: 15px; font: inherit;
+    font-size: 16px; background: #fff; color: var(--text); transition: border-color .15s;
   }
   .in:focus, .num:focus { outline: none; border-color: var(--accent); }
   .in.bad { border-color: var(--err); }
@@ -122,18 +212,44 @@
   .thanks { text-align: center; padding: 18px 0 8px; }
   .thanks .big { font-size: 60px; line-height: 1; }
   .thanks h2 { margin: 12px 0 6px; }
+  .phone-link { color: var(--accent); font-weight: 800; text-decoration: none; font-size: 17px; }
   footer { color: var(--muted); font-size: 12px; text-align: center; padding: 22px 0 30px; }
   footer a { color: var(--muted); }
-  .fade { animation: fade .28s ease; }
+
+  /* ---------- анимации ---------- */
+  .fade { animation: fade .3s ease; }
+  .in-r { animation: inR .42s var(--ease); }
+  .in-l { animation: inL .42s var(--ease); }
   @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  @keyframes inR { from { opacity: 0; transform: translateX(26px); } to { opacity: 1; transform: none; } }
+  @keyframes inL { from { opacity: 0; transform: translateX(-26px); } to { opacity: 1; transform: none; } }
+
   @media (min-width: 560px) {
     .opts { grid-template-columns: repeat(3, 1fr); }
-    .card { padding: 28px; }
+    .opts.n4 { grid-template-columns: repeat(2, 1fr); }
+    .card { padding: 26px; }
+    .hero-text { padding: 0 28px 70px; }
+    header.top { padding: 20px 28px 0; }
+  }
+  @media (min-width: 960px) {
+    .page {
+      display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 28px;
+      padding: 22px 28px 0; align-items: start;
+    }
+    .hero { position: sticky; top: 22px; height: calc(100vh - 44px); min-height: 560px; max-height: 900px; border-radius: 34px; }
+    .hero-text { padding: 0 44px 48px; }
+    header.top { padding: 26px 30px 0; }
+    .btn-hero { display: none; }
+    .side { margin: 0; padding: 0; }
+    .card { padding: 30px; }
+    .opts.pics { grid-template-columns: repeat(3, 1fr); }
+    .opts.n4 { grid-template-columns: repeat(2, 1fr); }
+    .opts.pics.n4 .thumb { aspect-ratio: 16 / 10; }
   }
   @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 
   .demo-banner { background: #0f172a; color: #e2e8f0; font-size: 12.5px; line-height: 1.35; text-align: center;
-    padding: 8px 12px; border-radius: 0 0 14px 14px; margin: -14px -16px 6px; }
+    padding: 8px 14px; position: relative; z-index: 5; }
   .demo-banner b { color: #fff; }
   .tgmsg { text-align: left; background: #e7f3ff; color: #0f172a; border-radius: 18px 18px 18px 6px;
     padding: 12px 14px; margin: 16px auto; max-width: 420px; font-size: 14px; line-height: 1.55;
@@ -143,29 +259,38 @@
 <body>
 <div class="wrap">
   <div class="demo-banner"><b>Демо-версия</b> квиза для «моипотолки.рф». Это не сайт компании: цены условные, форма ничего не отправляет.</div>
-  <header class="top">
-    <div class="brand">
-      <div class="logo" id="logo" aria-hidden="true">П</div>
-      <div><span id="cname">ПотолокПро</span><small id="ctag">Натяжные потолки под ключ</small></div>
+  <div class="page">
+    <section class="hero" id="hero">
+      <img class="hero-img" id="heroImg" alt="" decoding="async" fetchpriority="high">
+      <div class="hero-shade"></div>
+      <header class="top">
+        <div class="brand">
+          <div class="logo" id="logo" aria-hidden="true">П</div>
+          <div><span id="cname">ПотолокПро</span><small id="ctag">Натяжные потолки под ключ</small></div>
+        </div>
+        <a class="phone" id="cphone" href="#">&nbsp;</a>
+      </header>
+      <div class="hero-text">
+        <div class="eyebrow">Онлайн-расчёт</div>
+        <h1 id="title">Рассчитайте стоимость натяжного потолка за 1 минуту</h1>
+        <p id="subtitle"></p>
+        <ul class="badges" id="badges"></ul>
+        <button type="button" class="btn btn-hero" id="start">Рассчитать стоимость</button>
+      </div>
+    </section>
+
+    <div class="side">
+      <main class="card" id="quiz" aria-live="polite">
+        <div class="progress" aria-hidden="true"><div class="bar"><i id="bar"></i></div><span id="plabel">Шаг 1</span></div>
+        <div id="step"><noscript>Для расчёта включите JavaScript.</noscript></div>
+      </main>
+
+      <footer>
+        © <span id="fname">ПотолокПро</span> · <a href="privacy.html" target="_blank" rel="noopener">Политика конфиденциальности</a><br>
+        Расчёт предварительный и не является публичной офертой.
+      </footer>
     </div>
-    <a class="phone" id="cphone" href="#">&nbsp;</a>
-  </header>
-
-  <section class="hero">
-    <h1 id="title">Рассчитайте стоимость натяжного потолка за 1 минуту</h1>
-    <p id="subtitle"></p>
-    <ul class="badges" id="badges"></ul>
-  </section>
-
-  <main class="card" id="quiz" aria-live="polite">
-    <div class="progress" aria-hidden="true"><div class="bar"><i id="bar"></i></div><span id="plabel">Шаг 1</span></div>
-    <div id="step"><noscript>Для расчёта включите JavaScript.</noscript></div>
-  </main>
-
-  <footer>
-    © <span id="fname">ПотолокПро</span> · <a href="privacy.html" target="_blank" rel="noopener">Политика конфиденциальности</a><br>
-    Расчёт предварительный и не является публичной офертой.
-  </footer>
+  </div>
 </div>
 
 <script>
@@ -236,7 +361,7 @@
 })(typeof window !== "undefined" ? window : globalThis);
 
 </script>
-<script>window.QUIZ_CONFIG = {"company": {"name": "моипотолки.рф", "tagline": "Натяжные потолки · Казань", "phone": "", "badges": ["Расчёт за 1 минуту"]}, "texts": {"title": "Рассчитайте стоимость натяжного потолка за 1 минуту", "subtitle": "Ответьте на 6 коротких вопросов — сразу покажем примерную цену для Казань.", "result_title": "Ваш предварительный расчёт", "result_note": "Точную цену назовёт замерщик — замер бесплатный и ни к чему не обязывает.", "form_title": "Куда отправить расчёт и фото похожих работ?", "submit": "Получить расчёт", "thanks_title": "Спасибо! Заявка принята", "thanks_text": "Свяжемся с вами в течение 15 минут в рабочее время (9:00–21:00)."}, "currency": "₽", "messengers": [{"value": "telegram", "label": "Telegram"}, {"value": "whatsapp", "label": "WhatsApp"}, {"value": "max", "label": "MAX"}, {"value": "call", "label": "Позвоните мне"}], "steps": [{"id": "room", "type": "single", "short": "Помещение", "title": "Какое помещение?", "options": [{"value": "living", "label": "Гостиная / спальня", "icon": "🛋️"}, {"value": "kitchen", "label": "Кухня", "icon": "🍳"}, {"value": "bath", "label": "Ванная / санузел", "icon": "🛁"}, {"value": "hall", "label": "Коридор", "icon": "🚪"}, {"value": "flat", "label": "Вся квартира", "icon": "🏠"}, {"value": "office", "label": "Офис / коммерция", "icon": "🏢"}]}, {"id": "area", "type": "range", "short": "Площадь", "title": "Какая площадь потолка?", "hint": "Можно примерно — точно измерим на замере", "min": 3, "max": 150, "step": 1, "default": 18, "unit": "м²"}, {"id": "canvas", "type": "single", "short": "Полотно", "title": "Какое полотно хотите?", "options": [{"value": "mat", "label": "Матовое", "hint": "классика, как ровная побелка", "icon": "⬜"}, {"value": "satin", "label": "Сатиновое", "hint": "мягкий перламутровый отлив", "icon": "🌫️"}, {"value": "gloss", "label": "Глянцевое", "hint": "визуально увеличивает комнату", "icon": "✨"}, {"value": "fabric", "label": "Тканевое", "hint": "премиум, «дышащее» полотно", "icon": "🧵"}]}, {"id": "lights", "type": "counters", "short": "Освещение", "title": "Сколько светильников установить?", "hint": "Если не знаете — оставьте как есть, подскажем на замере", "items": [{"id": "spots", "label": "Точечные светильники", "min": 0, "max": 40, "default": 4}, {"id": "chandeliers", "label": "Люстры", "min": 0, "max": 6, "default": 1}]}, {"id": "extras", "type": "multi", "short": "Доп. работы", "title": "Что ещё нужно?", "hint": "Можно выбрать несколько или пропустить", "options": [{"value": "cornice", "label": "Скрытый карниз", "icon": "🪟"}, {"value": "niche", "label": "Ниша под шторы", "icon": "📐"}, {"value": "led", "label": "LED-подсветка по периметру", "icon": "💡"}, {"value": "floating", "label": "Парящий профиль", "icon": "🪶"}]}, {"id": "timing", "type": "single", "short": "Сроки", "title": "Когда планируете монтаж?", "options": [{"value": "asap", "label": "Как можно скорее", "icon": "⚡"}, {"value": "week", "label": "В течение недели", "icon": "📅"}, {"value": "month", "label": "В течение месяца", "icon": "🗓️"}, {"value": "later", "label": "Пока прицениваюсь", "icon": "🔍"}]}], "pricing": {"canvas_per_m2": {"mat": 450, "satin": 520, "gloss": 590, "fabric": 1350}, "room_coef": {"living": 1.0, "kitchen": 1.05, "bath": 1.12, "hall": 1.08, "flat": 0.95, "office": 1.0}, "min_area": 6, "light": {"spots": 450, "chandeliers": 750}, "extras": {"cornice": {"per": "m", "length": "wall", "price": 1600}, "niche": {"per": "m", "length": "wall", "price": 2200}, "led": {"per": "m", "length": "perimeter", "price": 1100}, "floating": {"per": "m", "length": "perimeter", "price": 900}}, "timing_coef": {"asap": 1.05, "week": 1.0, "month": 0.97, "later": 1.0}, "range": [0.92, 1.18], "min_total": 6000, "round_to": 100}};
+<script>window.QUIZ_CONFIG = {"company": {"name": "моипотолки.рф", "tagline": "Натяжные потолки · Казань", "phone": "", "badges": ["Расчёт за 1 минуту"]}, "images": {"hero": "assets/hero.webp", "result": "assets/result.webp"}, "texts": {"title": "Рассчитайте стоимость натяжного потолка за 1 минуту", "subtitle": "Ответьте на 6 коротких вопросов — сразу покажем примерную цену для Казань.", "result_title": "Ваш предварительный расчёт", "result_note": "Точную цену назовёт замерщик — замер бесплатный и ни к чему не обязывает.", "form_title": "Куда отправить расчёт и фото похожих работ?", "submit": "Получить расчёт", "thanks_title": "Спасибо! Заявка принята", "thanks_text": "Свяжемся с вами в течение 15 минут в рабочее время (9:00–21:00).", "cta": "Рассчитать стоимость"}, "currency": "₽", "messengers": [{"value": "telegram", "label": "Telegram"}, {"value": "whatsapp", "label": "WhatsApp"}, {"value": "max", "label": "MAX"}, {"value": "call", "label": "Позвоните мне"}], "steps": [{"id": "room", "type": "single", "short": "Помещение", "title": "Какое помещение?", "options": [{"value": "living", "label": "Гостиная / спальня", "icon": "🛋️", "image": "assets/room-living.webp"}, {"value": "kitchen", "label": "Кухня", "icon": "🍳", "image": "assets/room-kitchen.webp"}, {"value": "bath", "label": "Ванная / санузел", "icon": "🛁", "image": "assets/room-bath.webp"}, {"value": "hall", "label": "Коридор", "icon": "🚪", "image": "assets/room-hall.webp"}, {"value": "flat", "label": "Вся квартира", "icon": "🏠", "image": "assets/room-flat.webp"}, {"value": "office", "label": "Офис / коммерция", "icon": "🏢", "image": "assets/room-office.webp"}]}, {"id": "area", "type": "range", "short": "Площадь", "title": "Какая площадь потолка?", "hint": "Можно примерно — точно измерим на замере", "image": "assets/area.webp", "min": 3, "max": 150, "step": 1, "default": 18, "unit": "м²"}, {"id": "canvas", "type": "single", "short": "Полотно", "title": "Какое полотно хотите?", "options": [{"value": "mat", "label": "Матовое", "hint": "классика, как ровная побелка", "icon": "⬜", "image": "assets/canvas-mat.webp"}, {"value": "satin", "label": "Сатиновое", "hint": "мягкий перламутровый отлив", "icon": "🌫️", "image": "assets/canvas-satin.webp"}, {"value": "gloss", "label": "Глянцевое", "hint": "визуально увеличивает комнату", "icon": "✨", "image": "assets/canvas-gloss.webp"}, {"value": "fabric", "label": "Тканевое", "hint": "премиум, «дышащее» полотно", "icon": "🧵", "image": "assets/canvas-fabric.webp"}]}, {"id": "lights", "type": "counters", "short": "Освещение", "title": "Сколько светильников установить?", "hint": "Если не знаете — оставьте как есть, подскажем на замере", "image": "assets/lights.webp", "items": [{"id": "spots", "label": "Точечные светильники", "min": 0, "max": 40, "default": 4, "image": "assets/light-spots.webp"}, {"id": "chandeliers", "label": "Люстры", "min": 0, "max": 6, "default": 1, "image": "assets/light-chandelier.webp"}]}, {"id": "extras", "type": "multi", "short": "Доп. работы", "title": "Что ещё нужно?", "hint": "Можно выбрать несколько или пропустить", "options": [{"value": "cornice", "label": "Скрытый карниз", "icon": "🪟", "image": "assets/extra-cornice.webp"}, {"value": "niche", "label": "Ниша под шторы", "icon": "📐", "image": "assets/extra-niche.webp"}, {"value": "led", "label": "LED-подсветка, световые линии", "icon": "💡", "image": "assets/extra-led.webp"}, {"value": "floating", "label": "Парящий потолок", "icon": "🪶", "image": "assets/extra-floating.webp"}]}, {"id": "timing", "type": "single", "short": "Сроки", "title": "Когда планируете монтаж?", "options": [{"value": "asap", "label": "Как можно скорее", "icon": "⚡"}, {"value": "week", "label": "В течение недели", "icon": "📅"}, {"value": "month", "label": "В течение месяца", "icon": "🗓️"}, {"value": "later", "label": "Пока прицениваюсь", "icon": "🔍"}]}], "pricing": {"canvas_per_m2": {"mat": 450, "satin": 520, "gloss": 590, "fabric": 1350}, "room_coef": {"living": 1.0, "kitchen": 1.05, "bath": 1.12, "hall": 1.08, "flat": 0.95, "office": 1.0}, "min_area": 6, "light": {"spots": 450, "chandeliers": 750}, "extras": {"cornice": {"per": "m", "length": "wall", "price": 1600}, "niche": {"per": "m", "length": "wall", "price": 2200}, "led": {"per": "m", "length": "perimeter", "price": 1100}, "floating": {"per": "m", "length": "perimeter", "price": 900}}, "timing_coef": {"asap": 1.05, "week": 1.0, "month": 0.97, "later": 1.0}, "range": [0.92, 1.18], "min_total": 6000, "round_to": 100}, "asset_prefix": "../"};
 window.QUIZ_DEMO = true;</script>
 <script>
 (async function () {
@@ -256,7 +381,10 @@ window.QUIZ_DEMO = true;</script>
     return;
   }
   const T = cfg.texts, steps = cfg.steps, startedAt = Date.now();
+  const IMG = cfg.images || {};
+  const A = (p) => (p ? (cfg.asset_prefix || "") + p : "");
   const state = { i: 0, answers: {}, messenger: cfg.messengers[0].value, estimate: null };
+  let dir = 1;
 
   for (const s of steps) {
     if (s.type === "range") state.answers[s.id] = s.default;
@@ -267,13 +395,31 @@ window.QUIZ_DEMO = true;</script>
     }
   }
 
-  // --- шапка из конфига ---
+  // --- шапка и первый экран из конфига ---
   const C = cfg.company;
   $("#cname").textContent = C.name; $("#fname").textContent = C.name;
   $("#ctag").textContent = C.tagline; $("#logo").textContent = C.name.trim()[0] || "•";
   $("#cphone").textContent = C.phone; $("#cphone").href = "tel:+" + C.phone.replace(/\D/g, "");
+  if (!C.phone) $("#cphone").style.display = "none";
   $("#title").textContent = T.title; $("#subtitle").textContent = T.subtitle;
   $("#badges").innerHTML = (C.badges || []).map((b) => `<li>${esc(b)}</li>`).join("");
+  const heroImg = $("#heroImg");
+  if (IMG.hero) {
+    heroImg.onload = () => heroImg.classList.add("loaded");
+    heroImg.src = A(IMG.hero);
+  }
+  $("#start").textContent = T.cta || "Рассчитать стоимость";
+  $("#start").onclick = () => quizEl.scrollIntoView({ behavior: "smooth", block: "start" });
+
+  const img = (src, alt) => src
+    ? `<img src="${esc(A(src))}" alt="${esc(alt || "")}" loading="lazy" decoding="async" onload="this.classList.add('loaded')">`
+    : "";
+
+  function preload(i) {
+    const s = steps[i];
+    const list = s ? [s.image].concat((s.options || []).map((o) => o.image), (s.items || []).map((x) => x.image)) : [IMG.result];
+    list.filter(Boolean).forEach((p) => { const im = new Image(); im.src = A(p); });
+  }
 
   function setProgress() {
     const total = steps.length;
@@ -288,10 +434,18 @@ window.QUIZ_DEMO = true;</script>
   }
 
   function go(delta) {
-    state.i = Math.max(0, Math.min(steps.length, state.i + delta));
-    render();
-    const top = quizEl.getBoundingClientRect().top;
-    if (top < 0) quizEl.scrollIntoView({ behavior: "smooth", block: "start" });
+    const ni = Math.max(0, Math.min(steps.length, state.i + delta));
+    if (ni === state.i) return;
+    dir = delta > 0 ? 1 : -1;
+    stepEl.style.setProperty("--dir", dir);
+    stepEl.classList.add("leaving");
+    setTimeout(() => {
+      state.i = ni;
+      stepEl.classList.remove("leaving");
+      render();
+      const top = quizEl.getBoundingClientRect().top;
+      if (top < 0) quizEl.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 150);
   }
 
   function navHTML(s) {
@@ -305,25 +459,30 @@ window.QUIZ_DEMO = true;</script>
     const s = steps[state.i];
     if (!s) return renderResult();
     let body = "";
+    const pics = (s.options || []).some((o) => o.image);
+    if (s.image && !pics) body += `<div class="media">${img(s.image, s.title)}</div>`;
+    body += `<h2 class="q">${esc(s.title)}</h2><p class="hint">${esc(s.hint || "")}</p>`;
     if (s.type === "single" || s.type === "multi") {
-      body = '<div class="opts">' + s.options.map((o) => {
+      body += `<div class="opts n${s.options.length}${pics ? " pics" : ""}">` + s.options.map((o) => {
         const on = s.type === "single" ? state.answers[s.id] === o.value : state.answers[s.id].includes(o.value);
-        return `<button type="button" class="opt" data-v="${esc(o.value)}" aria-pressed="${on}">` +
-          `<span class="tick"></span><span class="ic">${o.icon || ""}</span><b>${esc(o.label)}</b>` +
-          `${o.hint ? `<small>${esc(o.hint)}</small>` : ""}</button>`;
+        return `<button type="button" class="opt${pics ? " pic" : ""}" data-v="${esc(o.value)}" aria-pressed="${on}">` +
+          (pics ? `<span class="thumb">${img(o.image, o.label)}</span>` : `<span class="ic">${o.icon || ""}</span>`) +
+          `<span class="tick"></span><span class="cap"><b>${esc(o.label)}</b>${o.hint ? `<small>${esc(o.hint)}</small>` : ""}</span></button>`;
       }).join("") + "</div>";
     } else if (s.type === "range") {
       const v = state.answers[s.id];
-      body = `<div class="range-val"><span id="rv">${v}</span> <small>${esc(s.unit || "")}</small></div>` +
+      body += `<div class="range-val"><span id="rv">${v}</span> <small>${esc(s.unit || "")}</small></div>` +
         `<input type="range" id="rng" min="${s.min}" max="${s.max}" step="${s.step}" value="${v}" aria-label="${esc(s.title)}">` +
         `<div class="range-row">Точное значение: <input class="num" id="rnum" type="number" inputmode="decimal" min="${s.min}" max="${s.max}" value="${v}"> ${esc(s.unit || "")}</div>`;
     } else if (s.type === "counters") {
-      body = s.items.map((it) => `<div class="counter"><span>${esc(it.label)}</span><div class="stepper" data-id="${esc(it.id)}">` +
+      body += s.items.map((it) => `<div class="counter">${it.image ? `<span class="cthumb">${img(it.image, it.label)}</span>` : ""}` +
+        `<span class="clabel">${esc(it.label)}</span><div class="stepper" data-id="${esc(it.id)}">` +
         `<button type="button" data-d="-1" aria-label="Меньше">−</button><output>${state.answers[s.id][it.id]}</output>` +
         `<button type="button" data-d="1" aria-label="Больше">+</button></div></div>`).join("");
     }
-    stepEl.innerHTML = `<div class="fade"><h2 class="q">${esc(s.title)}</h2><p class="hint">${esc(s.hint || "")}</p>${body}${navHTML(s)}</div>`;
+    stepEl.innerHTML = `<div class="${dir > 0 ? "in-r" : "in-l"}">${body}${navHTML(s)}</div>`;
     bindStep(s);
+    preload(state.i + 1);
   }
 
   function bindStep(s) {
@@ -335,7 +494,7 @@ window.QUIZ_DEMO = true;</script>
         state.answers[s.id] = b.dataset.v;
         $$(".opt", stepEl).forEach((x) => x.setAttribute("aria-pressed", x === b));
         next.disabled = false;
-        setTimeout(() => { if (steps[state.i] === s) go(1); }, 260);
+        setTimeout(() => { if (steps[state.i] === s) go(1); }, 320);
       });
     } else if (s.type === "multi") {
       $$(".opt", stepEl).forEach((b) => b.onclick = () => {
@@ -386,12 +545,11 @@ window.QUIZ_DEMO = true;</script>
     const est = QuizCalc.estimate(state.answers, cfg.pricing);
     state.estimate = est;
     const cur = esc(cfg.currency);
-    stepEl.innerHTML = `<div class="fade">
-      <div class="result">
-        <p class="hint" style="margin:0">${esc(T.result_title)}</p>
-        <div class="price"><span>от ${fmt(est.min)} до ${fmt(est.max)} ${cur}</span></div>
-        <p class="hint">${esc(T.result_note)}</p>
-      </div>
+    stepEl.innerHTML = `<div class="${dir > 0 ? "in-r" : "in-l"}">
+      <div class="res-hero">${img(IMG.result, "")}<div class="res-shade"></div>
+        <div class="res-text"><p>${esc(T.result_title)}</p>
+        <div class="price">от ${fmt(est.min)} до ${fmt(est.max)} ${cur}</div></div></div>
+      <p class="hint res-note">${esc(T.result_note)}</p>
       <div class="breakdown">
         <div>Полотно<b>${fmt(est.parts.canvas)} ${cur}</b></div>
         <div>Освещение<b>${fmt(est.parts.lights)} ${cur}</b></div>
@@ -483,9 +641,10 @@ window.QUIZ_DEMO = true;</script>
   function renderThanks() {
     bar.style.width = "100%"; plabel.textContent = "Готово";
     stepEl.innerHTML = `<div class="thanks fade"><div class="big">✅</div><h2>${esc(T.thanks_title)}</h2>
-      <p class="hint">${esc(T.thanks_text)}</p><p><a class="phone" href="tel:+${C.phone.replace(/\D/g, "")}">${esc(C.phone)}</a></p></div>`;
+      <p class="hint">${esc(T.thanks_text)}</p><p><a class="phone-link" href="tel:+${C.phone.replace(/\D/g, "")}">${esc(C.phone)}</a></p></div>`;
   }
 
+  preload(0);
   render();
 })();
 </script>
