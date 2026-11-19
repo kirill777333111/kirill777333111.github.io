@@ -1,0 +1,385 @@
+{
+  "company": {
+    "name": "ПОТОЛКИ",
+    "tagline": "Натяжные потолки · Ростов-на-Дону",
+    "phone": "+7 (989) 523-49-52",
+    "city": "Ростов-на-Дону",
+    "city_prep": "в Ростове-на-Дону",
+    "badges": [
+      "Бесплатный замер",
+      "Гарантия 5 лет",
+      "Монтаж за 1 день"
+    ],
+    "legal": "",
+    "works_url": ""
+  },
+  "bonus": {
+    "title": "Подробная смета в подарок",
+    "terms": "Пришлём расчёт с вариантами полотна и светильников"
+  },
+  "proof": {},
+  "metrika": "",
+  "images": {
+    "hero": "assets/hero.webp",
+    "hero_srcset": [
+      "assets/hero-640.webp 640w",
+      "assets/hero-1080.webp 1080w",
+      "assets/hero.webp 1600w"
+    ],
+    "result": "assets/result.webp",
+    "calc": "assets/calc.webp",
+    "thanks": "assets/thanks.webp",
+    "gift": "assets/gift.webp"
+  },
+  "texts": {
+    "eyebrow": "Онлайн-расчёт",
+    "title": "Рассчитайте стоимость натяжного потолка за 1 минуту",
+    "subtitle": "6 коротких вопросов — и примерная цена в Ростове-на-Дону сразу на экране. Замер бесплатно.",
+    "calc_title": "Считаем по ценам{city}…",
+    "calc_text": "Учитываем площадь, полотно, свет и доп. работы",
+    "result_title": "Предварительная стоимость{city}",
+    "result_note": "Итог уточнится на замере: углы, трубы, ниши. Замер бесплатный и ни к чему не обязывает.",
+    "included_title": "Входит в цену",
+    "included": [
+      "Полотно",
+      "Стеновой профиль",
+      "Монтаж"
+    ],
+    "form_title": "Расчёт готов. Куда прислать подробности?",
+    "submit": "Получить расчёт",
+    "safe_line": "Номер не передаём третьим лицам.",
+    "thanks_title": "Спасибо! Заявка принята",
+    "next_steps": [
+      "{next} в рабочее время",
+      "Согласуем удобное время замера",
+      "Замер бесплатный и ни к чему не обязывает"
+    ],
+    "cta": "Рассчитать стоимость"
+  },
+  "currency": "₽",
+  "messengers": [
+    {
+      "value": "telegram",
+      "label": "Telegram",
+      "cta": "Получить расчёт в Telegram",
+      "next": "Напишем в Telegram"
+    },
+    {
+      "value": "whatsapp",
+      "label": "WhatsApp",
+      "cta": "Получить расчёт в WhatsApp",
+      "next": "Напишем в WhatsApp"
+    },
+    {
+      "value": "max",
+      "label": "MAX",
+      "cta": "Получить расчёт в MAX",
+      "next": "Напишем в MAX"
+    },
+    {
+      "value": "call",
+      "label": "Позвоните мне",
+      "cta": "Жду звонка",
+      "next": "Позвоним вам"
+    }
+  ],
+  "steps": [
+    {
+      "id": "room",
+      "type": "single",
+      "short": "Помещение",
+      "title": "Где будет потолок?",
+      "options": [
+        {
+          "value": "living",
+          "label": "Гостиная или спальня",
+          "image": "assets/room-living.webp"
+        },
+        {
+          "value": "flat",
+          "label": "Вся квартира",
+          "image": "assets/room-flat.webp"
+        },
+        {
+          "value": "kitchen",
+          "label": "Кухня",
+          "image": "assets/room-kitchen.webp"
+        },
+        {
+          "value": "bath",
+          "label": "Ванная или санузел",
+          "image": "assets/room-bath.webp"
+        },
+        {
+          "value": "hall",
+          "label": "Коридор",
+          "image": "assets/room-hall.webp"
+        },
+        {
+          "value": "office",
+          "label": "Офис или магазин",
+          "image": "assets/room-office.webp"
+        }
+      ]
+    },
+    {
+      "id": "area",
+      "type": "range",
+      "short": "Площадь",
+      "title": "Какая площадь потолка?",
+      "hint": "Не знаете точно — возьмите площадь пола из документов. Замерщик уточнит бесплатно.",
+      "icon": "assets/icon-tape.webp",
+      "image": "assets/area.webp",
+      "min": 3,
+      "max": 150,
+      "step": 1,
+      "default": 18,
+      "unit": "м²",
+      "presets": [
+        {
+          "label": "до 10",
+          "value": 8,
+          "to": 10
+        },
+        {
+          "label": "10–15",
+          "value": 12,
+          "from": 10,
+          "to": 15
+        },
+        {
+          "label": "15–20",
+          "value": 18,
+          "from": 15,
+          "to": 20
+        },
+        {
+          "label": "20–30",
+          "value": 25,
+          "from": 20,
+          "to": 30
+        },
+        {
+          "label": "30–50",
+          "value": 40,
+          "from": 30,
+          "to": 50
+        },
+        {
+          "label": "50+",
+          "value": 60,
+          "from": 50
+        }
+      ],
+      "default_by": {
+        "step": "room",
+        "values": {
+          "bath": 4,
+          "hall": 6,
+          "kitchen": 10,
+          "living": 18,
+          "flat": 50,
+          "office": 40
+        }
+      }
+    },
+    {
+      "id": "canvas",
+      "type": "single",
+      "short": "Полотно",
+      "title": "Какое полотно нравится?",
+      "options": [
+        {
+          "value": "mat",
+          "label": "Матовое",
+          "hint": "Без бликов, как побелка",
+          "image": "assets/canvas-mat.webp",
+          "swatch": "assets/swatch-mat.webp"
+        },
+        {
+          "value": "satin",
+          "label": "Сатиновое",
+          "hint": "Мягкий отлив, как шёлк",
+          "image": "assets/canvas-satin.webp",
+          "swatch": "assets/swatch-satin.webp"
+        },
+        {
+          "value": "gloss",
+          "label": "Глянцевое",
+          "hint": "Зеркальный, комната больше",
+          "image": "assets/canvas-gloss.webp",
+          "swatch": "assets/swatch-gloss.webp"
+        },
+        {
+          "value": "fabric",
+          "label": "Тканевое",
+          "hint": "Премиум, «дышащее» полотно",
+          "image": "assets/canvas-fabric.webp",
+          "swatch": "assets/swatch-fabric.webp"
+        },
+        {
+          "value": "unknown",
+          "label": "Не знаю — посоветуйте",
+          "short": "Полотно подскажет мастер",
+          "hint": "Мастер привезёт образцы на замер",
+          "icon": "assets/icon-unknown.webp",
+          "wide": true
+        }
+      ]
+    },
+    {
+      "id": "lights",
+      "type": "counters",
+      "short": "Освещение",
+      "title": "Сколько светильников установить?",
+      "hint": "Не знаете — оставьте как есть, мастер подскажет.",
+      "image": "assets/lights.webp",
+      "items": [
+        {
+          "id": "spots",
+          "label": "Точечные светильники",
+          "short": "Точки",
+          "min": 0,
+          "max": 40,
+          "default": 4,
+          "image": "assets/light-spots.webp"
+        },
+        {
+          "id": "chandeliers",
+          "label": "Люстры",
+          "short": "Люстры",
+          "min": 0,
+          "max": 6,
+          "default": 1,
+          "image": "assets/light-chandelier.webp"
+        }
+      ]
+    },
+    {
+      "id": "extras",
+      "type": "multi",
+      "short": "Доп. работы",
+      "title": "Что ещё нужно?",
+      "tags": [
+        "Можно несколько",
+        "Можно пропустить"
+      ],
+      "options": [
+        {
+          "value": "cornice",
+          "label": "Скрытый карниз",
+          "image": "assets/extra-cornice.webp"
+        },
+        {
+          "value": "niche",
+          "label": "Ниша под шторы",
+          "image": "assets/extra-niche.webp"
+        },
+        {
+          "value": "led",
+          "label": "Световые линии и подсветка",
+          "image": "assets/extra-led.webp"
+        },
+        {
+          "value": "floating",
+          "label": "Парящий потолок",
+          "image": "assets/extra-floating.webp"
+        },
+        {
+          "value": "none",
+          "label": "Ничего не нужно",
+          "short": "Без доп. работ",
+          "hint": "Только полотно и светильники",
+          "icon": "assets/icon-none.webp",
+          "wide": true,
+          "exclusive": true
+        }
+      ]
+    },
+    {
+      "id": "timing",
+      "type": "single",
+      "short": "Сроки",
+      "title": "Когда планируете монтаж?",
+      "options": [
+        {
+          "value": "asap",
+          "label": "Как можно скорее",
+          "icon": "assets/time-asap.webp"
+        },
+        {
+          "value": "week",
+          "label": "В течение недели",
+          "icon": "assets/time-week.webp"
+        },
+        {
+          "value": "month",
+          "label": "В течение месяца",
+          "icon": "assets/time-month.webp"
+        },
+        {
+          "value": "later",
+          "label": "Пока прицениваюсь",
+          "icon": "assets/time-later.webp"
+        }
+      ]
+    }
+  ],
+  "pricing": {
+    "canvas_per_m2": {
+      "mat": 450,
+      "satin": 520,
+      "gloss": 590,
+      "fabric": 1350,
+      "unknown": 450
+    },
+    "room_coef": {
+      "living": 1.0,
+      "kitchen": 1.05,
+      "bath": 1.12,
+      "hall": 1.08,
+      "flat": 0.95,
+      "office": 1.0
+    },
+    "min_area": 6,
+    "light": {
+      "spots": 450,
+      "chandeliers": 750
+    },
+    "extras": {
+      "cornice": {
+        "per": "m",
+        "length": "wall",
+        "price": 1600
+      },
+      "niche": {
+        "per": "m",
+        "length": "wall",
+        "price": 2200
+      },
+      "led": {
+        "per": "m",
+        "length": "perimeter",
+        "price": 1100
+      },
+      "floating": {
+        "per": "m",
+        "length": "perimeter",
+        "price": 900
+      }
+    },
+    "timing_coef": {
+      "asap": 1.05,
+      "week": 1.0,
+      "month": 0.97,
+      "later": 1.0
+    },
+    "range": [
+      0.92,
+      1.18
+    ],
+    "min_total": 6000,
+    "round_to": 100
+  },
+  "asset_prefix": "../"
+}
