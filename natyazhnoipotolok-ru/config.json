@@ -26,6 +26,33 @@
       "assets/hero-1080.webp 1080w",
       "assets/hero.webp 1600w"
     ],
+    "hd_widths": [
+      1600,
+      2560,
+      3840
+    ],
+    "hd": [
+      "hero",
+      "result",
+      "lights",
+      "area",
+      "room-living",
+      "room-flat",
+      "room-kitchen",
+      "room-bath",
+      "room-hall",
+      "room-office",
+      "canvas-mat",
+      "canvas-satin",
+      "canvas-gloss",
+      "canvas-fabric",
+      "extra-led",
+      "extra-floating",
+      "extra-cornice",
+      "extra-niche",
+      "calc",
+      "thanks"
+    ],
     "result": "assets/result.webp",
     "calc": "assets/calc.webp",
     "thanks": "assets/thanks.webp",
