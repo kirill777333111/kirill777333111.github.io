@@ -778,8 +778,9 @@ window.QUIZ_DEMO = true;</script>
   function updateBar(s) {
     const first = state.i === 0;
     backBtn.hidden = first;
-    if (s.type === "single") return setBar(!first, null, false);
     let label = state.i === N - 1 ? "Показать расчёт" : "Далее";
+    // одиночный выбор: сам дальше не переходим — «Далее» появляется после выбора, чтобы можно было спокойно сравнить варианты
+    if (s.type === "single") return state.answers[s.id] === undefined ? setBar(!first, null, false) : setBar(true, label, true);
     if (s.type === "multi") {
       const arr = state.answers[s.id];
       const ex = arr.some((v) => (optOf(s, v) || {}).exclusive);
@@ -891,7 +892,8 @@ window.QUIZ_DEMO = true;</script>
   }
 
   function stepVisual(s) {
-    if (!state.started) return;
+    // до старта слева обложка; но если на первом вопросе уже что-то выбрали — показываем выбранное крупно
+    if (!state.started && state.answers[s.id] === undefined) return;
     let src = s.image;
     if (s.type === "single" || s.type === "multi") {
       const v = state.answers[s.id];
@@ -909,7 +911,6 @@ window.QUIZ_DEMO = true;</script>
         state.answers[s.id] = b.dataset.v;
         $$(".opt", stepEl).forEach((x) => x.setAttribute("aria-checked", x === b));
         onAnswer(s);
-        setTimeout(() => { if (state.view === "step" && steps[state.i] === s) go(1); }, reduceMotion ? 120 : 280);
       });
     } else if (s.type === "multi") {
       $$(".opt", stepEl).forEach((b) => b.onclick = () => {
@@ -973,7 +974,7 @@ window.QUIZ_DEMO = true;</script>
       const v = areaStep.default_by.values[state.answers[s.id]];
       if (v) state.answers[areaStep.id] = v;
     }
-    if (s.type !== "single") updateBar(s);
+    updateBar(s);
     renderVisSum();
     stepVisual(s);
     save();
